@@ -18,9 +18,21 @@
 }
 
 .App-content {
-  padding: 50px 60px;
+  padding: 50px 100px;
 }
 
 .Header-btn{
   margin-left: 10px;
+}
+
+.NoteList {
+  text-align: left;
+  list-style-type: none;
+}
+
+.NoteCard {
+  display: inline-block;
+  margin : 10px;
+  align-items: top;
+  vertical-align: top;
 }
