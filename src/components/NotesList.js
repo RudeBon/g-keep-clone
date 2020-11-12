@@ -9,8 +9,6 @@ const mockCardsData = [
     { id: 'e5jhbfdbd23h', title: "Yet another card", text: "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum" },
 ]
 
-
-
 export default function NotesList() {
     function getCards() {
         return mockCardsData.map(note =>
