@@ -21,8 +21,9 @@
   padding: 50px 100px;
 }
 
-.Header-btn{
+.btn{
   margin-left: 10px;
+  align-self: right;
 }
 
 .NoteList {
@@ -36,3 +37,5 @@
   align-items: top;
   vertical-align: top;
 }
+
+
