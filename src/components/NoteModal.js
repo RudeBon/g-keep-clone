@@ -17,6 +17,11 @@ export default function NoteModal(props) {
     const deleteNote = () => { console.log('deleting note..'); }
     const saveNote = () => { console.log('saving data'); }
 
+    const closeModal = () => {
+        setEditingMode(false);
+        props.handleModal();
+    }
+
     return (
         <>
         {editingMode 
@@ -26,7 +31,7 @@ export default function NoteModal(props) {
                 centered
                 visible={props.visible}
                 onOk={props.handleModal}
-                onCancel={props.handleModal}
+                onCancel={closeModal}
                 footer={[
                     <Button key="Cancel" onClick={editNote}>
                         Cancel
@@ -36,7 +41,7 @@ export default function NoteModal(props) {
                     </Button>,
                 ]}
             >
-                <TextArea defaultValue={props.note.text} ></TextArea>
+                <TextArea defaultValue={props.note.text} autoSize></TextArea>
             </Modal>
         ) 
         : (

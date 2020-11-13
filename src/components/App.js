@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import './App.css';
 import { Layout, Divider } from 'antd';
 import 'antd/dist/antd.css';
@@ -11,22 +11,23 @@ const { Header, Content } = Layout;
 
 
 function App() {
-useEffect(() => {
-  const db = firebase.database();
-  console.log(db);
-}, [])
+  useEffect(() => {
+    const db = firebase.database();
+    console.log(db);
+
+  }, [])
 
   return (
     <div className="App">
-      <Layout style={{ height: "100vh" }}>
+      <Layout style={{ minHeight: "100vh" }}>
         <Header className="App-header">
-         <p> G-Keep</p>
+          <p style={{ color: "white", marginTop: 'auto' }}> G-Keep</p>
         </Header>
         <Content className="App-content">
-          <Authorization authType="Login"/>
-          <Divider/>
+          <Authorization authType="Register" />
+          <Divider />
           <AddNoteComp />
-          <Divider/>
+          <Divider />
           <NotesList />
         </Content>
       </Layout>
