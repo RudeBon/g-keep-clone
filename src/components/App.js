@@ -1,21 +1,20 @@
-import { useEffect, useState } from 'react';
+// import { useEffect, useState } from 'react';
 import './App.css';
-import { Layout, Divider } from 'antd';
+import { Layout } from 'antd';
 import 'antd/dist/antd.css';
-import NotesList from './NotesList'
-import AddNoteComp from './AddNoteComp'
-import Authorization from './Authorization'
-import firebase from 'firebase'
+import Unauthorized from './Unathorized';
+import Authorized from './Authorized';
+// import firebase from 'firebase';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 const { Header, Content } = Layout;
 
 
 function App() {
-  useEffect(() => {
-    const db = firebase.database();
-    console.log(db);
-
-  }, [])
+  // useEffect(() => {
+  //   const db = firebase.database();
+  //   console.log(db);
+  // }, [])
 
   return (
     <div className="App">
@@ -24,11 +23,12 @@ function App() {
           <p style={{ color: "white", marginTop: 'auto' }}> G-Keep</p>
         </Header>
         <Content className="App-content">
-          <Authorization authType="Register" />
-          <Divider />
-          <AddNoteComp />
-          <Divider />
-          <NotesList />
+          <Router>
+            <Switch>
+              <Route path="/" exact component={Unauthorized} />
+              <Route path="/:uid" component={Authorized} />
+            </Switch>
+          </Router>
         </Content>
       </Layout>
     </div>

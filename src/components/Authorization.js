@@ -1,13 +1,14 @@
 import { useState } from 'react';
-import 'antd/dist/antd.css'
+import 'antd/dist/antd.css';
 import { Input, Button } from 'antd';
-import firebase from 'firebase'
+import firebase from 'firebase';
+import { Link } from 'react-router-dom';
 
 export default function Authorization(props) {
     const [userData, setUserData] = useState({
         email: '',
         password: '',
-        notes: [ 
+        notes: [
             // {title: "title", text:"text"}, // -------- note format
         ]
     });
@@ -27,7 +28,7 @@ export default function Authorization(props) {
     };
 
     const createAccount = () => {
-        const { email, password, notes } = userData;
+        const { email, password } = userData;
         firebase.auth().createUserWithEmailAndPassword(email, password)
             .then(() => signIn())
             .then(() => writeUserData(firebase.auth().currentUser.uid, userData))
@@ -51,7 +52,6 @@ export default function Authorization(props) {
 
     return (
         <>
-            <h3>Authorize to use the app</h3>
             <Input
                 id="email"
                 placeholder="Enter your email"
@@ -70,22 +70,29 @@ export default function Authorization(props) {
                         id="repeatedPassword"
                         placeholder="Repeat password"
                         required />
+                    <Link to={`/${firebase.auth().currentUser.uid}`}>
+                        <Button
+                            key={props.authType}
+                            type="primary"
+                            className="btn"
+                            onClick={createAccount}
+                        >
+                            {props.authType}
+                        </Button>
+                    </Link>
+
+                </>
+                : <Link to={`/${firebase.auth().currentUser.uid}`}>
                     <Button
                         key={props.authType}
                         type="primary"
                         className="btn"
-                        onClick={createAccount}
+                        onClick={signIn}
                     >
                         {props.authType}
-                    </Button> </>
-                : <Button
-                    key={props.authType}
-                    type="primary"
-                    className="btn"
-                    onClick={signIn}
-                >
-                    {props.authType}
-                </Button>
+                    </Button>
+                </Link>
+
             }
 
         </>
