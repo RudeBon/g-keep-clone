@@ -1,14 +1,41 @@
+import { useState } from 'react'
 import 'antd/dist/antd.css'
-import { Input, Button } from 'antd';
+import { Input, Button } from 'antd'
+import firebase from 'firebase'
 
 const { TextArea } = Input;
 
-export default function AddNoteComp (){
+export default function AddNoteComp() {
+    const [note, setNote] = useState({
+        title: '',
+        text: '',
+    })
+
+    const handleChange = ({ target: { value, id } }) => {
+        setNote({
+            ...note,
+            [id]: value,
+        });
+    };
+
+    const submitNote = () => { 
+        writeNoteToDB(firebase.auth().currentUser.uid, note);        
+        console.log(`${note.title}: ${note.text}`); 
+    };
+
+
+    function writeNoteToDB(userId, note) {
+        let newPostKey = firebase.database().ref().child('users/' + userId + '/notes').push().key;
+        return firebase.database().ref().update({ ['users/' + userId + '/notes/' + newPostKey]: note });
+        
+    };
+
+
     return (
         <div>
-        <Input placeholder="Title" />
-        <TextArea rows={4} placeholder="Type text here"/>
-        <Button>Add Note</Button>
+            <Input id="title" placeholder="Title" onChange={handleChange} />
+            <TextArea id="text" placeholder="Type text here" autoSize onChange={handleChange} />
+            <Button onClick={submitNote}>Add Note</Button>
         </div>
     )
 }
