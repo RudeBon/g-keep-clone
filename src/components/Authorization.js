@@ -1,16 +1,15 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import 'antd/dist/antd.css';
 import { Input, Button } from 'antd';
 import firebase from 'firebase';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 export default function Authorization(props) {
+    const history = useHistory();
     const [userData, setUserData] = useState({
         email: '',
         password: '',
-        notes: [
-            // {title: "title", text:"text"}, // -------- note format
-        ]
+        notes: [/* {title: "title", text:"text"}, ...*/]
     });
 
     function writeUserData(userId, userData) {
@@ -35,17 +34,12 @@ export default function Authorization(props) {
             .catch(error => console.log(error));
     }
 
+    const historyRedirect = (dest) => { history.push(`/${dest}`) }
+
     const signIn = () => {
         const { email, password } = userData;
         firebase.auth().signInWithEmailAndPassword(email, password)
-            .then(() => {
-                setUserData({
-                    ...userData,
-                    hasAccount: true,
-                    userId: firebase.auth().currentUser.uid,
-                });
-            })
-            .then(() => { console.log(userData) })
+            .then(() => { historyRedirect(firebase.auth().currentUser.uid) })
             .catch(error => console.log(error));
     }
 
@@ -70,31 +64,24 @@ export default function Authorization(props) {
                         id="repeatedPassword"
                         placeholder="Repeat password"
                         required />
-                    <Link to={`/${firebase.auth().currentUser.uid}`}>
-                        <Button
-                            key={props.authType}
-                            type="primary"
-                            className="btn"
-                            onClick={createAccount}
-                        >
-                            {props.authType}
-                        </Button>
-                    </Link>
-
-                </>
-                : <Link to={`/${firebase.auth().currentUser.uid}`}>
                     <Button
                         key={props.authType}
                         type="primary"
                         className="btn"
-                        onClick={signIn}
+                        onClick={createAccount}
                     >
                         {props.authType}
                     </Button>
-                </Link>
-
+                </>
+                : <Button
+                    key={props.authType}
+                    type="primary"
+                    className="btn"
+                    onClick={signIn}
+                >
+                    {props.authType}
+                </Button>
             }
-
         </>
     )
 }
