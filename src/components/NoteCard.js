@@ -9,10 +9,7 @@ import NoteModal from './NoteModal'
 
 export default function NoteCard(props) {
     const [visible, setVisible] = useState(false)
-    const handleModal = (e) => {setVisible(prev => !prev)}    
-    
-
-    console.log('card delivered');
+    const handleModal = (e) => {setVisible(prev => !prev)}   
     return (
         <>
         <Card
@@ -30,6 +27,8 @@ export default function NoteCard(props) {
         note={props.note}
         visible={visible}
         handleModal={() => handleModal()} 
+        note={props.note}
+        noteKey={props.noteKey}
         >
         </NoteModal>
         </>

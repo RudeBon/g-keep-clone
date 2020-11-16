@@ -6,20 +6,37 @@ import {
     EditOutlined
 } from '@ant-design/icons';
 
+import firebase from 'firebase'
+
 const { TextArea } = Input;
 
 export default function NoteModal(props) {
     const [editingMode, setEditingMode] = useState(false);
+    const [noteData, setNoteData] = useState(props.note);
     const editNote = () => {
         console.log('editing note..');
-        setEditingMode(prev => !prev);
+        setEditingMode(true);
     }
-    const deleteNote = () => { console.log('deleting note..'); }
-    const saveNote = () => { console.log('saving data'); }
+    const deleteNote = () => { 
+        props.handleModal();
+        console.log('deleting note..');
+    }
+    const saveNote = () => { 
+        setEditingMode(false);        
+        console.log('saving data'); 
+        return firebase.database().ref().update({ ['users/' + firebase.auth().currentUser.uid + '/notes/' + props.noteKey]: noteData })
+    }
 
     const closeModal = () => {
         setEditingMode(false);
         props.handleModal();
+    }
+    const handleChange = ({ target: { value, id } }) => {
+        setNoteData({
+            ...noteData,
+            [id]: value,
+        });
+        console.log(noteData);
     }
 
     return (
@@ -27,7 +44,7 @@ export default function NoteModal(props) {
         {editingMode 
         ? (
             <Modal
-                title={<Input defaultValue={props.note.title} bordered={false}></Input> }
+                title={<Input id='title' defaultValue={props.note.title} bordered={false} onChange={handleChange}></Input> }
                 centered
                 visible={props.visible}
                 onOk={props.handleModal}
@@ -41,7 +58,7 @@ export default function NoteModal(props) {
                     </Button>,
                 ]}
             >
-                <TextArea defaultValue={props.note.text} autoSize></TextArea>
+                <TextArea id='text' defaultValue={props.note.text} autoSize onChange={handleChange}></TextArea>
             </Modal>
         ) 
         : (

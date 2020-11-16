@@ -2,9 +2,9 @@ import NoteCard from './NoteCard'
 
 export default function NotesList(props) {
     const getUserNotesfromFirebase = () => {
-        return Object.keys(props.userNotes).map(key =>
+        return Object.keys(props.userNotes).map(key => 
             <li key={key} className="NoteCard">
-                <NoteCard note={props.userNotes[key]}></NoteCard>
+                <NoteCard note={props.userNotes[key]} noteKey={key}></NoteCard>
             </li>
         )
     }
