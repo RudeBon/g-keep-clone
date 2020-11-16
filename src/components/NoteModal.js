@@ -20,6 +20,7 @@ export default function NoteModal(props) {
     const deleteNote = () => { 
         props.handleModal();
         console.log('deleting note..');
+        return firebase.database().ref('users/' + firebase.auth().currentUser.uid + '/notes/' + props.noteKey).remove();        
     }
     const saveNote = () => { 
         setEditingMode(false);        
