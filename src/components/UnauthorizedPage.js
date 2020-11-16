@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Modal } from 'antd';
+import { Button } from 'antd';
 import 'antd/dist/antd.css';
 import AuthorizationModal from './AuthorizationModal';
 
@@ -34,17 +34,11 @@ export default function UnauthorizedPage() {
             >
                 Register
         </Button>
-            <Modal
-                title={authType}
+            <AuthorizationModal
+                authType={authType}
                 visible={visible}
-                centered
-                onCancel={handleModal}
-                onOk={handleModal}
-            >
-                <AuthorizationModal
-                    authType={authType}
-                />
-            </Modal>
+                handleModal={handleModal}
+            />
         </>
     )
 }

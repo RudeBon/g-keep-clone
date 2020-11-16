@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import 'antd/dist/antd.css';
-import { Input, Button } from 'antd';
+import { Input, Button, Modal } from 'antd';
 import firebase from 'firebase';
 import { useHistory } from 'react-router-dom';
 
 export default function AuthorizationModal(props) {
     const history = useHistory();
+    const [errorMessage, setErrorMessage] = useState('')
     const [userData, setUserData] = useState({
         email: '',
         password: '',
@@ -26,12 +27,20 @@ export default function AuthorizationModal(props) {
         });
     };
 
+    const closeModal = () => {
+        props.handleModal();
+        setErrorMessage('');
+    }
+
     const createAccount = () => {
         const { email, password } = userData;
         firebase.auth().createUserWithEmailAndPassword(email, password)
             .then(() => signIn())
             .then(() => writeUserData(firebase.auth().currentUser.uid, userData))
-            .catch(error => console.error(error));
+            .catch(error => {
+                console.error(error);
+                setErrorMessage(error.message);
+            });
     }
 
     const historyRedirect = (dest) => { history.push(`/${dest}`) }
@@ -40,11 +49,33 @@ export default function AuthorizationModal(props) {
         const { email, password } = userData;
         firebase.auth().signInWithEmailAndPassword(email, password)
             .then(() => { historyRedirect(firebase.auth().currentUser.uid) })
-            .catch(error => console.error(error));
+            .catch(error => {
+                console.error(error);
+                setErrorMessage(error.message);
+            });
     }
 
     return (
-        <>
+        <Modal
+            title={props.authType}
+            visible={props.visible}
+            centered
+            onCancel={closeModal}
+            onOk={closeModal}
+            footer={[
+                <Button key="cancel" onClick={closeModal}>
+                    Cancel
+                </Button>,
+                <Button
+                    key={props.authType}
+                    type="primary"
+                    className="btn"
+                    onClick={props.authType.toLowerCase() === "register" ? createAccount : signIn}
+                >
+                    {props.authType}
+                </Button>
+            ]}
+        >
             <Input
                 id="email"
                 placeholder="Enter your email"
@@ -56,31 +87,16 @@ export default function AuthorizationModal(props) {
                 placeholder="Input password"
                 required
                 onChange={handleChange}
-            />
+            />            
             {props.authType.toLowerCase() === "register"
-                ? <>
-                    <Input.Password
-                        id="repeatedPassword"
-                        placeholder="Repeat password"
-                        required />
-                    <Button
-                        key={props.authType}
-                        type="primary"
-                        className="btn"
-                        onClick={createAccount}
-                    >
-                        {props.authType}
-                    </Button>
-                </>
-                : <Button
-                    key={props.authType}
-                    type="primary"
-                    className="btn"
-                    onClick={signIn}
-                >
-                    {props.authType}
-                </Button>
+                ? <Input.Password
+                    id="repeatedPassword"
+                    placeholder="Repeat password"
+                    required
+                />
+                : <></>
             }
-        </>
+            <h6 style={{ color: "red" }}>{errorMessage}</h6>
+        </Modal>
     )
 }
