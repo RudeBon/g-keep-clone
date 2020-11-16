@@ -1,29 +1,17 @@
-// import { useEffect, useState } from 'react';
 import './App.css';
 import { Layout, Button } from 'antd';
 import 'antd/dist/antd.css';
-import Unauthorized from './Unathorized';
-import Authorized from './Authorized';
+import UnauthorizedPage from './UnauthorizedPage';
+import AuthorizedPage from './AuthorizedPage';
 import firebase from 'firebase';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 
 const { Header, Content } = Layout;
 
 function App() {
-  // useEffect(() => {
-  //   const db = firebase.database();
-  //   console.log(db);
-  // }, [])
-
-  const getActualUser = () => {
-    console.log(`${firebase.auth().currentUser !== null ? firebase.auth().currentUser.uid : null} <------------- CurrentUserID`);
-  }
-
   const handleSignOut = () => {
     firebase.auth().signOut().then(function () {
-      console.log('signed out successfully',);
     }).catch(function (error) {
-      // An error happened.
       console.log(error);
     });
   }
@@ -38,10 +26,9 @@ function App() {
           </Header>
           <Content className="App-content">
             <Switch>
-              <Route path="/" exact component={Unauthorized} />
-              <Route path="/:uid" component={Authorized} />
+              <Route path="/" exact component={UnauthorizedPage} />
+              <Route path="/:uid" component={AuthorizedPage} />
             </Switch>
-            <Button onClick={getActualUser}>uid</Button>
           </Content>
         </Router>
       </Layout>

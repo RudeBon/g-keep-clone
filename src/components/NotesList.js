@@ -1,7 +1,7 @@
 import NoteCard from './NoteCard'
 
 export default function NotesList(props) {
-    const getUserNotesfromFirebase = () => {
+    const renderUserNotesfromFirebase = () => {
         if (typeof props.userNotes === 'object' && props.userNotes !== null) {
             return (
                 <>
@@ -23,7 +23,7 @@ export default function NotesList(props) {
 
     return (
         <>
-            { getUserNotesfromFirebase() }
+            { renderUserNotesfromFirebase() }
         </>
     )
 }

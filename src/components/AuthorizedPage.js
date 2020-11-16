@@ -2,17 +2,16 @@ import { useState, useEffect } from 'react';
 import { Divider } from 'antd';
 import 'antd/dist/antd.css';
 import NotesList from './NotesList';
-import AddNoteComp from './AddNoteComp';
+import AddNoteForm from './AddNoteForm';
 import firebase from 'firebase';
 
-export default function Authorized() {
+export default function AuthorizedPage() {
     const [userNotes, setUserNotes] = useState({});
     useEffect(() => {
         if (firebase.auth().currentUser !== null) {
             var ref = firebase.database().ref('users').child(firebase.auth().currentUser.uid).child('/notes');
             ref.on('value', function (snapshot) {
                 setUserNotes(snapshot.val());
-                console.log(snapshot);
             }, function (error) {
                 console.error(error);
             });
@@ -24,7 +23,7 @@ export default function Authorized() {
             {firebase.auth().currentUser !== null
                 ? (
                     <>
-                        <AddNoteComp />
+                        <AddNoteForm />
                         <Divider />
                         <NotesList userNotes={userNotes} />
                     </>

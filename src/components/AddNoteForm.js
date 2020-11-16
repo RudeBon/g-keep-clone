@@ -5,7 +5,7 @@ import firebase from 'firebase'
 
 const { TextArea } = Input;
 
-export default function AddNoteComp() {
+export default function AddNoteForm() {
     const [note, setNote] = useState({
         title: '',
         text: '',
@@ -19,17 +19,14 @@ export default function AddNoteComp() {
     };
 
     const submitNote = () => { 
-        writeNoteToDB(firebase.auth().currentUser.uid, note);        
-        console.log(`${note.title}: ${note.text}`); 
+        writeNoteToDB(firebase.auth().currentUser.uid, note);  
     };
-
 
     function writeNoteToDB(userId, note) {
         let newPostKey = firebase.database().ref().child('users/' + userId + '/notes').push().key;
         return firebase.database().ref().update({ ['users/' + userId + '/notes/' + newPostKey]: note });
         
     };
-
 
     return (
         <div>
