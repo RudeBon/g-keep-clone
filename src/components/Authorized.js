@@ -8,29 +8,25 @@ import firebase from 'firebase';
 export default function Authorized() {
     const [userNotes, setUserNotes] = useState({});
     useEffect(() => {
-        firebase.database().ref('users').child(firebase.auth().currentUser.uid).child('/notes').once('value')
-            .then((data) => {
-                let fetchedData = data.val()
-                console.log('Fetched Data', fetchedData)
-                setUserNotes(data.val())
-                console.log('Data in state', userNotes)
-            })
-            .then()
-            .catch((error) => {
-                console.log('Fetching Error', error)
+        if (firebase.auth().currentUser !== null) {
+            var ref = firebase.database().ref('users').child(firebase.auth().currentUser.uid).child('/notes');
+            ref.on('value', function (snapshot) {
+                setUserNotes(snapshot.val());
+                console.log(snapshot);
+            }, function (error) {
+                console.error(error);
             });
+        }
     }, [])
-
-
 
     return (
         <>
             {firebase.auth().currentUser !== null
                 ? (
                     <>
-                        <AddNoteComp/>
+                        <AddNoteComp />
                         <Divider />
-                        <NotesList userNotes={userNotes}/>
+                        <NotesList userNotes={userNotes} />
                     </>
                 )
                 : (
