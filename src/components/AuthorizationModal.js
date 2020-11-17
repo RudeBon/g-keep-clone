@@ -10,6 +10,7 @@ export default function AuthorizationModal(props) {
     const [userData, setUserData] = useState({
         email: '',
         password: '',
+        repeatedPassword: '',
         notes: []
     });
 
@@ -34,6 +35,7 @@ export default function AuthorizationModal(props) {
 
     const createAccount = () => {
         const { email, password } = userData;
+        checkRepeatedPass();
         firebase.auth().createUserWithEmailAndPassword(email, password)
             .then(() => signIn())
             .then(() => writeUserData(firebase.auth().currentUser.uid, userData))
@@ -43,7 +45,15 @@ export default function AuthorizationModal(props) {
             });
     }
 
-    const historyRedirect = (dest) => { history.push(`/${dest}`) }
+    const historyRedirect = (dest) => { history.push(`/${dest}`) };
+
+    const checkRepeatedPass = () => {
+        if (userData.password !== userData.repeatedPassword) {
+            setErrorMessage('You entered two different passwords. Please try again.')
+            throw errorMessage;
+            
+        }
+    }
 
     const signIn = () => {
         const { email, password } = userData;
@@ -93,6 +103,7 @@ export default function AuthorizationModal(props) {
                     id="repeatedPassword"
                     placeholder="Repeat password"
                     required
+                    onChange={handleChange}
                 />
                 : <></>
             }
